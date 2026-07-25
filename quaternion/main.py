@@ -22,3 +22,16 @@ class IntroIntro(ThreeDScene):
         run_time=2
         )
         self.wait(2)
+
+class Transition(Scene):
+    def construct(self):
+        self.wait(1)
+        rects_pre = VGroup([Rectangle(height=9/9, width=16/9) for _ in range(20)])
+        self.add(rects_pre)
+        rects_pre.center()
+        self.play(
+            FadeIn(rects_pre),
+            rects_pre.animate.scale(3),
+            lag_ratio=.15,
+            run_time=10
+        )

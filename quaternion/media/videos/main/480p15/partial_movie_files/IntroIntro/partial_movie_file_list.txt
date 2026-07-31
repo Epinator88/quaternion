@@ -1,4 +1,8 @@
 # This file is used internally by FFMPEG.
-file 'file:D:/Development/quat_vid/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1207562675_1121617232_631829896.mp4'
-file 'file:D:/Development/quat_vid/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/2387202409_3698580403_2873729818.mp4'
-file 'file:D:/Development/quat_vid/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/4120447125_1831374817_190437540.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1207562675_548731573_2567174909.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_4141442521_4163467159.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_2230675760_165428962.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_2990856128_272967210.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_1959249656_866014622.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_2745245563_2896208991.mp4'
+file 'file:C:/Users/Student/GameMakerProjects/quaternion/quaternion/media/videos/main/480p15/partial_movie_files/IntroIntro/1798807848_3879069619_2094463039.mp4'

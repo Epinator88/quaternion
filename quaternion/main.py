@@ -494,18 +494,52 @@ class Fourth(ThreeDScene):
             run_time=2
         )
         self.wait(3)
-        combo = VGroup(sliders, labels)
         self.play(
             FadeOut(dot),
             FadeOut(axes),
             FadeOut(dots),
-            combo.animate.arrange(DOWN)
+            sliders.animate.arrange(DOWN, buff=1).shift(UP*.75),
+            labels.animate.arrange(DOWN, buff=1).shift(UP*.75+LEFT*2)
         )
-        self.stop_ambient_camera_rotation()
-
-class FourthRotate(Scene):
-    def construct(self):
-        return super().construct()
+        self.wait(2)
+        wSlide = NumberLine(
+            x_range=[-1,1,1], #use camera tricks to make it look bigger
+            length=3,
+            color=GOLD,
+        ).set_shade_in_3d(False)
+        wLabel = MathTex("w").set_shade_in_3d(False).set_color(GOLD)
+        self.camera.add_fixed_in_frame_mobjects(wSlide, wLabel)
+        wSlide.next_to(sliders, DOWN, buff=1)
+        wLabel.next_to(wSlide, LEFT, buff=DEFAULT_MOBJECT_TO_MOBJECT_BUFFER*1.5)
+        self.play(
+            Create(wSlide),
+            FadeIn(wLabel)
+        )
+        self.wait(5)
+        self.play(
+            Indicate(wSlide),
+            Indicate(wLabel),
+            Indicate(xSlide),
+            Indicate(xLabel)
+        )
+        self.wait(3)
+        self.play(
+            zSlide.animate.set_opacity(.2),
+            zLabel.animate.set_opacity(.2),
+            wSlide.animate.set_opacity(.2),
+            wLabel.animate.set_opacity(.2)
+        )
+        self.wait(3)
+        self.play(
+            zSlide.animate.set_opacity(1.),
+            zLabel.animate.set_opacity(1.),
+        )
+        self.wait(3)
+        self.play(
+            wSlide.animate.set_opacity(1.),
+            wLabel.animate.set_opacity(1.),
+        )
+        self.stop_ambient_camera_rotation() 
 
 class Quaternions(Scene):
     def construct(self):

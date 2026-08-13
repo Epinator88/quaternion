@@ -3,7 +3,7 @@ from manim_combinable import *
 import math
 
 class IntroIntro(ThreeDScene):
-    def construct(self):
+    def construct(self): #please excuse the mess; i did not know the existence of self.camera.add_fixed_position_mobject
         self.camera.set_zoom(.8)
         world_x = Arrow3D(start=ORIGIN, end=RIGHT).set_color(RED) # pyright: ignore[reportUndefinedVariable]
         world_y = Arrow3D(start=ORIGIN, end=UP).set_color(GREEN)
@@ -411,9 +411,97 @@ class Imaginary(Scene):
         ))
         self.wait(5)
 
-class Fourth(Scene):
+#camera coord system is like latitude longitude
+#phi is 0 at north pole, higher = more down. inverted latitude
+#theta is longitude
+#gamma is roll of camera itself
+
+#we want to be like 70* phi and then rotate passively around theta
+
+#"why aren't you using radians" i've grown up with degrees & they're a more human measurement, like fahrenheit.
+#why am i writing these like someone is going to read this lmfao
+
+class Fourth(ThreeDScene):
     def construct(self):
-        return super().construct()
+        self.camera.set_zoom(.8)
+        self.set_camera_orientation(phi=70*DEGREES, theta=30*DEGREES)
+        self.begin_ambient_camera_rotation()
+        axes = ThreeDAxes()
+        axes.get_x_axis().set_color(RED)
+        axes.get_y_axis().set_color(GREEN)
+        axes.get_z_axis().set_color(BLUE)
+        dot = Dot3D(radius=.12).set_color(GOLD).set_opacity(1.)
+        xSlide = NumberLine(
+            x_range=[-1,1,1], #use camera tricks to make it look bigger
+            length=3,
+            color=RED,
+        ).set_shade_in_3d(False)
+        xLabel = MathTex("x").set_shade_in_3d(False).set_color(RED)
+        xDot = Dot().set_shade_in_3d(False).set_color(RED)
+        ySlide = NumberLine(
+            x_range=[-1,1,1], #use camera tricks to make it look bigger
+            length=3,
+            color=GREEN
+        ).set_shade_in_3d(False)
+        yLabel = MathTex("y").set_shade_in_3d(False).set_color(GREEN)
+        yDot = Dot().set_shade_in_3d(False).set_color(GREEN)
+        zSlide = NumberLine(
+            x_range=[-1,1,1], #use camera tricks to make it look bigger
+            length=3,
+            color=BLUE
+        ).set_shade_in_3d(False)
+        zLabel = MathTex("z").set_shade_in_3d(False).set_color(BLUE)
+        zDot = Dot().set_shade_in_3d(False).set_color(BLUE)
+        sliders = VGroup(xSlide, ySlide, zSlide).arrange(RIGHT, buff=1)
+        labels = VGroup(xLabel, yLabel, zLabel).arrange(RIGHT, buff=3.8)
+        dots = VGroup(xDot, yDot, zDot).arrange(RIGHT, buff=3.84)
+        self.play(FadeIn(axes))
+        self.wait(5) #maybe not extract the axis to the screen but add the sliders on the bottom of the screen?
+        self.add_fixed_in_frame_mobjects(sliders, labels, dots)
+        sliders.shift(DOWN*2.5)
+        labels.shift(DOWN*3)
+        dots.shift(DOWN*2.5)
+        self.play(
+            axes.animate.shift(OUT),
+            FadeIn(dot),
+            dot.animate.shift(OUT),
+            Create(sliders),
+            Create(labels)
+            #put each slider on and the dot at [0,0,0]
+        )
+        self.wait(2)
+        self.play(
+            dot.animate.shift(np.array([1,2,3])),
+            xDot.animate.shift(RIGHT*.3),
+            yDot.animate.shift(RIGHT*.6),
+            zDot.animate.shift(RIGHT*.9),
+            run_time=2
+        )
+        self.wait(2)
+        self.play(
+            dot.animate.shift(np.array([-3,1,-2])),
+            xDot.animate.shift(LEFT*.9),
+            yDot.animate.shift(RIGHT*.3),
+            zDot.animate.shift(LEFT*.6),
+            run_time=2
+        )
+        self.wait(2)
+        self.play(
+            dot.animate.shift(np.array([-2,-5,-2])),
+            xDot.animate.shift(LEFT*.6),
+            yDot.animate.shift(LEFT*1.5),
+            zDot.animate.shift(LEFT*.6),
+            run_time=2
+        )
+        self.wait(3)
+        combo = VGroup(sliders, labels)
+        self.play(
+            FadeOut(dot),
+            FadeOut(axes),
+            FadeOut(dots),
+            combo.animate.arrange(DOWN)
+        )
+        self.stop_ambient_camera_rotation()
 
 class FourthRotate(Scene):
     def construct(self):

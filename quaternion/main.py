@@ -592,7 +592,7 @@ class Quaternions(ThreeDScene):
         ))
         inf = MathTex("ijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijk",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
         self.wait(2)
-        inf.set_opacity(.6).set_opacity(0.0)
+        inf.set_opacity(0.0)
         def scroll(mobject = Mobject, dt = float):
             mobject.shift(LEFT*dt*.3) #now we're thinking with updaters
             if mobject.get_x() <= -1:
@@ -673,12 +673,12 @@ class Quaternions(ThreeDScene):
         labelnk = MathTex("-k",tex_to_color_map={"-k":BLUE})
         dots = VGroup(doti, dotni, dotj, dotnj, dotk, dotnk, dot1)
         labels = VGroup(labeli, labelni, labelj, labelnj, labelk, labelnk)
-        labeli.always.next_to(doti).rotate(30*DEGREES)
-        labelni.always.next_to(dotni).rotate(30*DEGREES)
-        labelj.always.next_to(dotj).rotate(30*DEGREES)
-        labelnj.always.next_to(dotnj).rotate(30*DEGREES)
-        labelk.always.next_to(dotk).rotate(30*DEGREES)
-        labelnk.always.next_to(dotnk).rotate(30*DEGREES)
+        labeli.always.next_to(doti)
+        labelni.always.next_to(dotni)
+        labelj.always.next_to(dotj)
+        labelnj.always.next_to(dotnj)
+        labelk.always.next_to(dotk)
+        labelnk.always.next_to(dotnk)
         self.play(
             Create(axes),
             Create(dots),
@@ -690,6 +690,7 @@ class Quaternions(ThreeDScene):
         tex5.scale(1.5)
         self.add_fixed_in_frame_mobjects(box2)
         self.play(
+            FadeOut(labels),
             FadeIn(box2)
         )
         self.add_fixed_in_frame_mobjects(tex5)
@@ -732,14 +733,76 @@ class Quaternions(ThreeDScene):
         self.play(
             FadeOut(axes),
             FadeOut(dots),
-            FadeOut(labels),
             FadeOut(spehre),
             FadeOut(axis),
         )
 
 class QuaternionRotation(Scene):
     def construct(self):
-        return super().construct()
+        self.wait(1)
+        tex1 = Text("point * quat")
+        tex2 = MathTex("(w_p+x_pi+y_pj+z_pk)","(w_q+x_qi+y_qj+z_qk)",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE})
+        self.play(
+            Write(tex1.chars[:5])
+        )
+        self.wait(1)
+        self.play(
+            Write(tex1.chars[5:])
+        )
+        self.wait(1)
+        self.play(
+            Transform(tex1.chars[:5], tex2[0]) #god please work it would be so funny if it worked
+        )
+        self.wait(1)
+        self.play(
+            Transform(tex1.chars[5:], tex2[1])
+        )
+        self.wait(3) #from here, do like a table for the multiplication of the two quaternions
+        t2cm = {'i':RED,'j':GREEN,'k':BLUE,'-':GOLD}
+        table = Table(
+            element_to_mobject=MathTex, 
+            element_to_mobject_config={"tex_to_color_map":t2cm},
+            table=[["w_pw_q", "w_px_qi", "w_py_qj", "w_pz_qk"],
+             ["x_pw_qi", "-x_px_q","x_py_qk","-x_pz_qj"],
+             ["y_pw_qj", "-y_px_qk","-y_py_q","y_pz_qi"],
+             ["z_pw_qk", "z_px_qj","-z_py_qi","-z_pz_q"]],
+            row_labels=[MathTex("w_p",tex_to_color_map=t2cm), MathTex("x_pi",tex_to_color_map=t2cm), MathTex("y_pj",tex_to_color_map=t2cm), MathTex("z_pk",tex_to_color_map=t2cm)],
+            col_labels=[MathTex("w_q",tex_to_color_map=t2cm), MathTex("x_qi",tex_to_color_map=t2cm), MathTex("y_qj",tex_to_color_map=t2cm), MathTex("z_qk",tex_to_color_map=t2cm)],
+        )
+        box=Rectangle(BLACK, 2, 20).set_fill(BLACK, 1.0)
+        self.play(
+            FadeIn(box)
+        )
+        self.clear()
+        self.play(
+            FadeIn(table)
+        )
+        self.wait(5)
+        self.play(
+            FadeOut(table)
+        )
+        self.wait(2)
+        sq1 = Square().shift(LEFT*2).add_updater(lambda x, dt: x.rotate(90*DEGREES*dt)).set_opacity(0.)
+        sq2 = Square().shift(RIGHT*2).add_updater(lambda x, dt: x.rotate(90*DEGREES*dt, LEFT)).set_opacity(0.)
+        #use in/out for color: get current z and divide by out, set color to that
+        self.play(
+            sq1.animate.set_opacity(1.),
+            sq2.animate.set_opacity(1.)
+        )
+        self.wait(4)
+        #ij ji top corner, add back the axes
+        #stuff in top corner
+        #circle and line twist and stretch
+        #swap in top corner
+        #again twist and stretch
+        #flip for negative
+        #do it on the model
+        #table of all possibilities
+        #pick the wrong ones, pick the right ones
+        #show the final quaternion, divided by two, then qvq-1
+        #sphere should scale out and rotate then scale in and rotate more
+        #should be done by like...7? 8?
+        #then editing for like 4-5 hrs, done by 1am.
     
 class Transition(Scene):
     def construct(self):

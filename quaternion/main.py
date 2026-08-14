@@ -590,11 +590,13 @@ class Quaternions(ThreeDScene):
             Write(rules),
             lag_ratio=.4
         ))
-        inf = MathTex("ijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijk",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
+        inf = MathTex("ijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijk",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
         self.wait(2)
-        inf.set_opacity(.6).shift(RIGHT*10).set_opacity(0.0)
-        def scroll(mobject, dt):
-            mobject.shift(LEFT*dt*.2) #now we're thinking with updaters
+        inf.set_opacity(.6).set_opacity(0.0)
+        def scroll(mobject = Mobject, dt = float):
+            mobject.shift(LEFT*dt*.3) #now we're thinking with updaters
+            if mobject.get_x() <= -1:
+                mobject.shift(RIGHT)
         inf.add_updater(scroll)
         self.add(inf)
         self.play(
@@ -602,10 +604,140 @@ class Quaternions(ThreeDScene):
             units.animate.shift(UP),
             inf.animate.set_opacity(1.0)
         )
+        self.wait(5)
+        rules2 = MathTex("ji=-k,","kj=-i,","ik=-j",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5).shift(DOWN)
+        box = Rectangle(BLACK, 1, 15).set_fill(BLACK, .6)
+        self.play(
+            Write(rules2),
+            FadeIn(box)
+        )
+        self.wait(4)
+        rules3 = MathTex("ijk=i^2=j^2-k^2=-1",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5).shift(DOWN*2)
+        self.play(
+            rules2.animate.set_opacity(.4),
+            Write(rules3)
+        )
+        self.wait(5)
+        self.play(
+            FadeOut(rules),
+            FadeOut(rules2),
+            FadeOut(rules3),
+            FadeOut(units),
+            box.animate.set_opacity(1.)
+        )
+        inf.remove_updater(scroll)
+        self.wait(4)
+        tex4 = MathTex("ij=k, ji=-k",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
+        self.play(
+            Write(tex4)
+        )
         self.wait(2)
-
-
+        self.play(
+            Unwrite(tex4)
+        )
+        self.clear()
+        self.set_camera_orientation(phi=60*DEGREES, theta=30*DEGREES)
+        self.begin_ambient_camera_rotation()
+        axes = ThreeDAxes(
+            x_length=40,
+            y_length=40,
+            z_length=10,
+            x_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            },
+            y_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            },
+            z_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            }
+        )
+        dot1 = Dot3D().scale(2)
+        def lock(mobject = Mobject, dt = float):
+            mobject.rotate(dt*.02)
+        doti = Dot3D(color=RED).shift(OUT*2).scale(2)
+        labeli = MathTex("i",tex_to_color_map={"i":RED})
+        dotni = Dot3D(color=RED).shift(IN*2).scale(2)
+        labelni = MathTex("-i",tex_to_color_map={"-i":RED})
+        dotj = Dot3D(color=GREEN).shift(UP*2).scale(2)
+        labelj = MathTex("j",tex_to_color_map={"j":GREEN})
+        dotnj = Dot3D(color=GREEN).shift(DOWN*2).scale(2)
+        labelnj = MathTex("-j",tex_to_color_map={"-j":GREEN})
+        dotk = Dot3D(color=BLUE).shift(LEFT*2).scale(2)
+        labelk = MathTex("k",tex_to_color_map={"k":BLUE})
+        dotnk = Dot3D(color=BLUE).shift(RIGHT*2).scale(2)
+        labelnk = MathTex("-k",tex_to_color_map={"-k":BLUE})
+        dots = VGroup(doti, dotni, dotj, dotnj, dotk, dotnk, dot1)
+        labels = VGroup(labeli, labelni, labelj, labelnj, labelk, labelnk)
+        labeli.always.next_to(doti).add_updater(lock).rotate(30*DEGREES)
+        labelni.always.next_to(dotni).add_updater(lock).rotate(30*DEGREES)
+        labelj.always.next_to(dotj).add_updater(lock).rotate(30*DEGREES)
+        labelnj.always.next_to(dotnj).add_updater(lock).rotate(30*DEGREES)
+        labelk.always.next_to(dotk).add_updater(lock).rotate(30*DEGREES)
+        labelnk.always.next_to(dotnk).add_updater(lock).rotate(30*DEGREES)
+        self.play(
+            Create(axes),
+            Create(dots),
+            Create(labels)
+        )
+        self.wait(6)
+        tex5 = MathTex("\\cos(\\theta)+\\sin(\\theta)(xi+yj+zk)",tex_to_color_map={'xi':RED,'yj':GREEN,'zk':BLUE,"\\theta":GOLD})
+        box2 = Rectangle(height=1, width=10).set_color(GOLD).set_fill(BLACK, 1.0)
+        tex5.scale(1.5)
+        self.add_fixed_in_frame_mobjects(box2)
+        self.play(
+            FadeIn(box2)
+        )
+        self.add_fixed_in_frame_mobjects(tex5)
+        self.play(
+            Write(tex5)
+        )
         self.wait(3)
+        self.play(
+            FadeOut(box2),
+            FadeOut(tex5)
+        )
+        self.wait(3)
+        spehre = Sphere() #yes its spelled wrong on purpose. pourpouse? pirpis. prepos. purpus. pirrpis? pirpiss. it's 3am
+        self.play(
+            Create(spehre)
+        )
+        axis = Arrow3D(ORIGIN, np.array([3,1,2]), color=RED)
+        self.wait(1)
+        self.play(
+            Create(axis)
+        )
+        tex6 = MathTex("45^{\\circ}",tex_to_color_map={"45^{\\circ}":GOLD}).scale(2)
+        box3 = Rectangle(height=1, width=1).set_color(GOLD).set_fill(BLACK, 1.0).scale(2)
+        self.add_fixed_in_frame_mobjects(box3, tex6)
+        self.play(
+            FadeIn(box3),
+            FadeIn(tex6)
+        )
+        self.wait(1)
+        self.play(
+            FadeOut(box3),
+            FadeOut(tex6)
+        )
+        self.wait(2)
+        self.play(
+            spehre.animate.shift(np.array([3,1,2])*2).scale(2).rotate(angle=45*DEGREES, axis=np.array([3,1,2])),
+            run_time=3
+        )
+        self.wait(4)
+        self.play(
+            FadeOut(axes),
+            FadeOut(dots),
+            FadeOut(labels),
+            FadeOut(spehre),
+            FadeOut(axis),
+        )
 
 class QuaternionRotation(Scene):
     def construct(self):

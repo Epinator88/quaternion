@@ -4,16 +4,10 @@ it is about quaternions and their applications in computer graphics and some of 
 
 i like complex numbers so this was an easy on-ramp
 
-you are reading a readme file which is also currently in a private repository so i'm not sure why exactly you're either writing or reading it
+i'm ok with how this video turned out. it was kinda hectic juggling camps and essays and stuff all summer as well as this but it was still pretty fun. i will return next year even stronger.
 
-yeah i'm writing this to myself in a time capsule sort of manner to come off as witty and silly
+there's a number of ways i could have made this video better: i could have learnt/animated the 4d part more, i could have added bits of euler's rotation theorem, i could have done a better topic, etc, etc.
 
-when in reality
+ultimately though, i'm just glad that this year, i was able to push something. last year's entry is still rotting away in my repos.
 
-i am witty and silly
-
-make sure to actually finish the video before the deadline this year
-
-ok thank you bye
-
-enjoy your thursday tomorrow
+thank you for reading :)

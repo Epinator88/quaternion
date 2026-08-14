@@ -541,9 +541,71 @@ class Fourth(ThreeDScene):
         )
         self.stop_ambient_camera_rotation() 
 
-class Quaternions(Scene):
+class Quaternions(ThreeDScene):
     def construct(self):
-        return super().construct()
+        tex1 = Text("Complex Numbers")
+        tex2 = Text("Fourth Dimension")
+        tex1.shift(LEFT*2+UP)
+        self.play(
+            Write(tex1)
+        )
+        self.wait(2)
+        tex2.shift(RIGHT*2+DOWN)
+        self.play(
+            Write(tex2)
+        )
+        self.wait(3)
+        self.play(AnimationGroup(
+            tex1.animate.shift(RIGHT*2+DOWN),
+            tex2.animate.shift(LEFT*2+UP),
+            Rotate(tex1, 720*DEGREES),
+            Rotate(tex2, 720*DEGREES),
+            rate_func=rate_functions.rush_into
+        ))
+        self.remove(tex1, tex2)
+        tex3 = Text("Quaternions").set_color(GOLD).scale(2)
+        self.add(tex3)
+        self.play(
+            tex3.animate.scale(.75),
+            rate_func=rate_functions.rush_from
+        )
+        self.wait(3)
+        self.play(
+            Unwrite(tex3)
+        )
+        units = MathTex("1","i","j","k",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
+        self.wait(1)
+        self.play(
+            Write(units[:2])
+        )
+        self.wait(1)
+        self.play(
+            Write(units[2:])
+        )
+        self.wait(1)
+        rules = MathTex("ij=k,","jk=i,","ki=j",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
+        self.wait(2)
+        self.play(AnimationGroup(
+            units.animate.shift(UP).set_opacity(.4),
+            Write(rules),
+            lag_ratio=.4
+        ))
+        inf = MathTex("ijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijkijk",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5)
+        self.wait(2)
+        inf.set_opacity(.6).shift(RIGHT*10).set_opacity(0.0)
+        def scroll(mobject, dt):
+            mobject.shift(LEFT*dt*.2) #now we're thinking with updaters
+        inf.add_updater(scroll)
+        self.add(inf)
+        self.play(
+            rules.animate.shift(UP).set_opacity(.4),
+            units.animate.shift(UP),
+            inf.animate.set_opacity(1.0)
+        )
+        self.wait(2)
+
+
+        self.wait(3)
 
 class QuaternionRotation(Scene):
     def construct(self):

@@ -659,8 +659,6 @@ class Quaternions(ThreeDScene):
             }
         )
         dot1 = Dot3D().scale(2)
-        def lock(mobject = Mobject, dt = float):
-            mobject.rotate(dt*.02)
         doti = Dot3D(color=RED).shift(OUT*2).scale(2)
         labeli = MathTex("i",tex_to_color_map={"i":RED})
         dotni = Dot3D(color=RED).shift(IN*2).scale(2)
@@ -675,12 +673,12 @@ class Quaternions(ThreeDScene):
         labelnk = MathTex("-k",tex_to_color_map={"-k":BLUE})
         dots = VGroup(doti, dotni, dotj, dotnj, dotk, dotnk, dot1)
         labels = VGroup(labeli, labelni, labelj, labelnj, labelk, labelnk)
-        labeli.always.next_to(doti).add_updater(lock).rotate(30*DEGREES)
-        labelni.always.next_to(dotni).add_updater(lock).rotate(30*DEGREES)
-        labelj.always.next_to(dotj).add_updater(lock).rotate(30*DEGREES)
-        labelnj.always.next_to(dotnj).add_updater(lock).rotate(30*DEGREES)
-        labelk.always.next_to(dotk).add_updater(lock).rotate(30*DEGREES)
-        labelnk.always.next_to(dotnk).add_updater(lock).rotate(30*DEGREES)
+        labeli.always.next_to(doti).rotate(30*DEGREES)
+        labelni.always.next_to(dotni).rotate(30*DEGREES)
+        labelj.always.next_to(dotj).rotate(30*DEGREES)
+        labelnj.always.next_to(dotnj).rotate(30*DEGREES)
+        labelk.always.next_to(dotk).rotate(30*DEGREES)
+        labelnk.always.next_to(dotnk).rotate(30*DEGREES)
         self.play(
             Create(axes),
             Create(dots),
@@ -727,7 +725,7 @@ class Quaternions(ThreeDScene):
         )
         self.wait(2)
         self.play(
-            spehre.animate.shift(np.array([3,1,2])*2).scale(2).rotate(angle=45*DEGREES, axis=np.array([3,1,2])),
+            spehre.animate.shift(np.array([3,1,2])).scale(3).rotate(angle=45*DEGREES, axis=np.array([3,1,2])),
             run_time=3
         )
         self.wait(4)

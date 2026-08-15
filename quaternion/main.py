@@ -1007,8 +1007,8 @@ class QuaternionRotation(ThreeDScene):
         #table of all possibilities
         table2 = Table(
             table=[["ipi: i^2, -1", "ip-i: kj*2"], ["-ipi: -kj*2", "-ip-i: -i^2, 1"]],
-            row_labels=["ip_", "-ip_"],
-            col_labels=["_pi", "_p-i"]
+            row_labels=[Text("ip_"), Text("-ip_")],
+            col_labels=[Text("_pi"), Text("_p-i")]
         )
         self.play(
             Create(table2)

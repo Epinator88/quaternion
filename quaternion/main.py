@@ -10,7 +10,7 @@ class IntroIntro(ThreeDScene):
         world_z = Arrow3D(start=ORIGIN, end=np.array([0,0,1])).set_color(BLUE)
         anchor = VGroup(world_x,world_y,world_z).set_opacity(0.0)
         self.add(anchor)
-        self.wait(1)
+        self.wait(4)
         light = self.camera.light_source
         light.shift(UP*40)
         torusX = Torus(major_radius=3, minor_radius=.15, stroke_width=0).set_color(color.RED).rotate(90*DEGREES, np.array([0, 1, 0]))
@@ -46,16 +46,16 @@ class IntroIntro(ThreeDScene):
         ),
         run_time=2
         )
-        self.wait(2)
+        self.wait(3)
         self.play(AnimationGroup(
             #x, z, y
             Rotate(gimbal, 180*DEGREES, localZ.get_end()),
             Rotate(gimbal, 180*DEGREES, localY.get_end()),
             Rotate(gimbal, 180*DEGREES, localX.get_end()),  
             lag_ratio=1.4,
-            run_time=3
+            run_time=2
         ))
-        self.wait(2)    
+        self.wait(6)    
         GLock = Text("Gimbal Lock").shift(UP*4).scale(1.5)
         self.play(AnimationGroup(
             gimbal.animate.shift(DOWN*.75),
@@ -70,6 +70,7 @@ class IntroIntro(ThreeDScene):
             lag_ratio=.5,
             run_time=2
         ))
+        self.wait(7)
         self.play(
             xcon1.animate.set_opacity(1.0),
             xcon2.animate.set_opacity(1.0),
@@ -78,7 +79,7 @@ class IntroIntro(ThreeDScene):
             zcon1.animate.set_opacity(1.0),
             zcon2.animate.set_opacity(1.0)
         )
-        self.wait(3)
+        self.wait(6)
         self.play(
             Rotate(rigX, 90*DEGREES, localX.get_end()),
             Rotate(torusY, 90*DEGREES, localX.get_end()),
@@ -95,12 +96,11 @@ class IntroIntro(ThreeDScene):
             Rotate(rigX, 180*DEGREES, localY.get_end()),
             Rotate(rigZ, 180*DEGREES, localY.get_end())
         )
-        self.wait(1)
         tex2 = Text("Rotating about x-axis", t2c={" x": RED_C}).shift(UP*4).scale(1.5)
         self.play(
-            TransformMatchingShapes(text, tex2)
+            ReplacementTransform(text, tex2)
         )
-        self.wait(1)
+        self.wait(3)
         self.play(
             Rotate(rigX, 180*DEGREES, localY.get_end())
         )
@@ -120,16 +120,6 @@ class IntroIntro(ThreeDScene):
             Rotate(rigX, -30*DEGREES, localX.get_end()),
             Rotate(torusY, -30*DEGREES, localX.get_end()),
         )
-        self.wait(1)
-        localZ.set_color(RED).scale(3)
-        self.play(
-            localZ.animate.set_opacity(1)
-        )
-        self.wait(2)
-        self.play(
-            Uncreate(localZ)
-        )
-        self.wait(2)
         self.play(
             Uncreate(gimbal)
         )
@@ -140,14 +130,14 @@ class Imaginary(Scene):
         self.play(
             Write(imag)
         )
-        self.wait(1)
+        self.wait(7)
         eq = MathTex("x^{2}+1=0")
         self.play(
             AnimationGroup(imag.animate.shift(UP*1.5)),
             Write(eq),
             lag_ratio=.4
         )
-        self.wait(1)
+        self.wait(2)
         sol = MathTex("x=i,-i")
         self.play(
             AnimationGroup(eq.animate.shift(DOWN*1.5)),
@@ -183,7 +173,6 @@ class Imaginary(Scene):
             FadeOut(func1),
             FadeOut(std_plane)
         )
-        self.wait(1)
         tex1 = Text("Useless").shift(UP)
         tex2 = Text("False")
         tex3 = Text("Imaginary").set_color(YELLOW).shift(DOWN)
@@ -192,7 +181,7 @@ class Imaginary(Scene):
             Write(tex2),
             Write(tex3),
             lag_ratio=1,
-            run_time=4.5
+            run_time=4
         ))
         self.wait(3)
         self.play(
@@ -214,16 +203,16 @@ class Imaginary(Scene):
             Write(eq5),
             lag_ratio=.3
         ))
-        self.wait(5)
+        self.wait(9)
         self.play(
             eq2.animate.set_color(RED)
         )
-        self.wait(1)
+        self.wait(2)
         self.play(
             eq3.animate.set_color(RED),
             eq4.animate.set_color(RED)
         )
-        self.wait(2)
+        self.wait(1)
         self.play(
             FadeOut(eq2),
             FadeOut(key2),
@@ -232,7 +221,6 @@ class Imaginary(Scene):
             FadeOut(eq5)
         )
         self.remove(eq2)
-        self.wait(2)
         eq2.shift(DOWN*1.5)
         eq6 = MathTex("{{(4)^3}}-{{15(4)}}-{{(4)}}").shift(UP*.5)
         eq65 = MathTex("{{64}}-{{60}}-{{4}}").shift(UP*.5)
@@ -253,12 +241,11 @@ class Imaginary(Scene):
         self.play(
             TransformMatchingTex(eq65, eq675)
         )
-        self.wait(2)
         self.play(
             Write(eq7)
         )
         eq8 = MathTex("x=2").shift(DOWN*.5).shift(RIGHT*1.5)
-        self.wait(2)
+        self.wait(.5)
         self.play(
             Write(eq8)
         )
@@ -268,7 +255,7 @@ class Imaginary(Scene):
             Unwrite(eq7),
             Unwrite(eq8)
         )
-        self.wait(2)
+        self.wait(20)
         line = NumberLine(
             x_range=[-5,5,1],
             length=20, #should be going off-screen
@@ -280,7 +267,7 @@ class Imaginary(Scene):
             Create(line),
         )
         ind = Arrow(start=UP, end=DOWN).shift(UP*1.25+RIGHT)
-        self.wait(1)
+        self.wait(11)
         self.play(
             Create(ind)
         )
@@ -295,21 +282,21 @@ class Imaginary(Scene):
         self.play(
             Write(eq9)
         )
-        self.wait(1)
+        self.wait(2)
         self.play(Unwrite(eq9))
-        self.wait(1)
-        self.play(
-            line.animate.flip(),
-        )
         self.wait(2)
         self.play(
             line.animate.flip(),
         )
-        self.wait(2)
+        self.wait(7)
+        self.play(
+            line.animate.flip(),
+        )
+        self.wait(11)
         self.play(
             Rotate(line),
         )
-        self.wait(2)
+        self.wait(6)
         self.play(
             Rotate(line),
         )
@@ -466,7 +453,8 @@ class Fourth(ThreeDScene):
             FadeIn(dot),
             dot.animate.shift(OUT),
             Create(sliders),
-            Create(labels)
+            Create(labels),
+            Create(dots)
             #put each slider on and the dot at [0,0,0]
         )
         self.wait(2)
@@ -475,23 +463,18 @@ class Fourth(ThreeDScene):
             xDot.animate.shift(RIGHT*.3),
             yDot.animate.shift(RIGHT*.6),
             zDot.animate.shift(RIGHT*.9),
-            run_time=2
         )
-        self.wait(2)
         self.play(
             dot.animate.shift(np.array([-3,1,-2])),
             xDot.animate.shift(LEFT*.9),
             yDot.animate.shift(RIGHT*.3),
             zDot.animate.shift(LEFT*.6),
-            run_time=2
         )
-        self.wait(2)
         self.play(
             dot.animate.shift(np.array([-2,-5,-2])),
             xDot.animate.shift(LEFT*.6),
             yDot.animate.shift(LEFT*1.5),
             zDot.animate.shift(LEFT*.6),
-            run_time=2
         )
         self.wait(3)
         self.play(
@@ -499,7 +482,7 @@ class Fourth(ThreeDScene):
             FadeOut(axes),
             FadeOut(dots),
             sliders.animate.arrange(DOWN, buff=1).shift(UP*.75),
-            labels.animate.arrange(DOWN, buff=1).shift(UP*.75+LEFT*2)
+            labels.animate.arrange(DOWN, buff=.95).shift(UP*.75+LEFT*2)
         )
         self.wait(2)
         wSlide = NumberLine(
@@ -509,7 +492,7 @@ class Fourth(ThreeDScene):
         ).set_shade_in_3d(False)
         wLabel = MathTex("w").set_shade_in_3d(False).set_color(GOLD)
         self.camera.add_fixed_in_frame_mobjects(wSlide, wLabel)
-        wSlide.next_to(sliders, DOWN, buff=1)
+        wSlide.next_to(sliders, DOWN, buff=.95)
         wLabel.next_to(wSlide, LEFT, buff=DEFAULT_MOBJECT_TO_MOBJECT_BUFFER*1.5)
         self.play(
             Create(wSlide),
@@ -539,6 +522,7 @@ class Fourth(ThreeDScene):
             wSlide.animate.set_opacity(1.),
             wLabel.animate.set_opacity(1.),
         )
+        self.wait(2)
         self.stop_ambient_camera_rotation() 
 
 class Quaternions(ThreeDScene):
@@ -549,12 +533,10 @@ class Quaternions(ThreeDScene):
         self.play(
             Write(tex1)
         )
-        self.wait(2)
         tex2.shift(RIGHT*2+DOWN)
         self.play(
             Write(tex2)
         )
-        self.wait(3)
         self.play(AnimationGroup(
             tex1.animate.shift(RIGHT*2+DOWN),
             tex2.animate.shift(LEFT*2+UP),
@@ -611,13 +593,13 @@ class Quaternions(ThreeDScene):
             Write(rules2),
             FadeIn(box)
         )
-        self.wait(4)
-        rules3 = MathTex("ijk=i^2=j^2-k^2=-1",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5).shift(DOWN*2)
+        self.wait(10)
+        rules3 = MathTex("ijk=i^2=j^2=k^2=-1",tex_to_color_map={'i':RED,'j':GREEN,'k':BLUE}).scale(1.5).shift(DOWN*2)
         self.play(
             rules2.animate.set_opacity(.4),
             Write(rules3)
         )
-        self.wait(5)
+        self.wait(6)
         self.play(
             FadeOut(rules),
             FadeOut(rules2),
@@ -684,7 +666,7 @@ class Quaternions(ThreeDScene):
             Create(dots),
             Create(labels)
         )
-        self.wait(6)
+        self.wait(31)
         tex5 = MathTex("\\cos(\\theta)+\\sin(\\theta)(xi+yj+zk)",tex_to_color_map={'xi':RED,'yj':GREEN,'zk':BLUE,"\\theta":GOLD})
         box2 = Rectangle(height=1, width=10).set_color(GOLD).set_fill(BLACK, 1.0)
         tex5.scale(1.5)
@@ -697,7 +679,7 @@ class Quaternions(ThreeDScene):
         self.play(
             Write(tex5)
         )
-        self.wait(3)
+        self.wait(14)
         self.play(
             FadeOut(box2),
             FadeOut(tex5)
@@ -915,10 +897,10 @@ class QuaternionRotation(ThreeDScene):
         )
         self.remove(tex4)
         self.add_fixed_in_frame_mobjects(tex5)
-        ar5.rotate(180*DEGREES)
-        ar6.rotate(180*DEGREES)
-        ar7.rotate(180*DEGREES)
-        ar8.rotate(180*DEGREES)
+        ar5.rotate(180*DEGREES).shift(LEFT*.1+DOWN*.1)
+        ar6.rotate(180*DEGREES).shift(RIGHT*.1+DOWN*.1)
+        ar7.rotate(180*DEGREES).shift(RIGHT*.1+UP*.1)
+        ar8.rotate(180*DEGREES).shift(LEFT*.1+UP*.1)
         ip_jk.rotate(90*DEGREES).flip()
         self.play(AnimationGroup(
             Rotate(tex5, 540*DEGREES),
@@ -945,14 +927,14 @@ class QuaternionRotation(ThreeDScene):
             ar7.animate.scale(.01),
             ar8.animate.scale(.01),
             ip_i1.animate.scale(.01),
-            FadeOut(ip_jk)
+            ip_jk.animate.scale(.01)
         )
         self.add_fixed_in_frame_mobjects(tex6)
-        ar1.rotate(180*DEGREES)
-        ar2.rotate(180*DEGREES)
-        ar3.rotate(180*DEGREES)
-        ar4.rotate(180*DEGREES)
-        ip_i1.shift(DOWN).flip(axis=OUT)
+        ar1.rotate(180*DEGREES).shift(LEFT*.1+DOWN*.1)
+        ar2.rotate(180*DEGREES).shift(RIGHT*.1+DOWN*.1)
+        ar3.rotate(180*DEGREES).shift(RIGHT*.1+UP*.1)
+        ar4.rotate(180*DEGREES).shift(LEFT*.1+UP*.1)
+        ip_i1.shift(IN).rotate(180*DEGREES, UP)
         self.play(
             Write(tex6),
             ar1.animate.scale(100),
@@ -964,10 +946,10 @@ class QuaternionRotation(ThreeDScene):
             ar7.animate.scale(100),
             ar8.animate.scale(100),
             ip_i1.animate.scale(100),
-            FadeIn(ip_jk)
+            ip_jk.animate.scale(100),
         )
         self.wait(5)
-        tex7 = Text("p-i").rotate(180*DEGREES)
+        tex7 = Text("p*-i").rotate(180*DEGREES)
         tex7.to_corner(UL)
         self.play(
             Rotate(tex6, 540*DEGREES),
@@ -980,10 +962,10 @@ class QuaternionRotation(ThreeDScene):
         )
         self.remove(tex6)
         self.add_fixed_in_frame_mobjects(tex7)
-        ar5.rotate(180*DEGREES)
-        ar6.rotate(180*DEGREES)
-        ar7.rotate(180*DEGREES)
-        ar8.rotate(180*DEGREES)
+        ar5.rotate(180*DEGREES).shift(RIGHT*.1+UP*.1)
+        ar6.rotate(180*DEGREES).shift(LEFT*.1+UP*.1)
+        ar7.rotate(180*DEGREES).shift(LEFT*.1+DOWN*.1)
+        ar8.rotate(180*DEGREES).shift(RIGHT*.1+DOWN*.1)
         ip_jk.rotate(90*DEGREES).flip()
         self.play(AnimationGroup(
             Rotate(tex7, 540*DEGREES),
@@ -996,12 +978,16 @@ class QuaternionRotation(ThreeDScene):
         )
         self.wait(5)
         self.play(
-            FadeOut(labels),
-            FadeOut(axes),
-            FadeOut(dots),
+            labels.animate.set_opacity(0.),
+            axes.animate.set_opacity(0.),
+            dots.animate.set_opacity(0.),
             FadeOut(tex7),
             FadeOut(circ1),
-            FadeOut(circ2)
+            FadeOut(circ2),
+            FadeOut(ip_i1),
+            FadeOut(ip_jk),
+            FadeOut(i1),
+            FadeOut(jk)
         )
         #do it on the model
         #table of all possibilities
@@ -1010,18 +996,11 @@ class QuaternionRotation(ThreeDScene):
             row_labels=[Text("ip_"), Text("-ip_")],
             col_labels=[Text("_pi"), Text("_p-i")]
         )
+        self.add_fixed_in_frame_mobjects(table2)
         self.play(
             Create(table2)
         )
-        self.wait(4)
-        self.play(
-            table2.animate.add_highlighted_cell((1, 1), color=RED)
-        )
-        self.wait(4)
-        self.play(
-            table2.animate.add_highlighted_cell((1, 2), color=GREEN)
-        )
-        self.wait(4)
+        self.wait(12)
         #pick the wrong ones, pick the right ones
         #show the final quaternion, divided by two, then qvq-1
         tex8 = MathTex("\\cos(\\frac{\\theta}{2})+\\sin(\\frac{\\theta}{2})(xi+yj+zk)",tex_to_color_map={'xi':RED,'yj':GREEN,'zk':BLUE,"\\theta":GOLD})
@@ -1029,6 +1008,7 @@ class QuaternionRotation(ThreeDScene):
         self.play(
             FadeOut(table2)
         )
+        self.add_fixed_in_frame_mobjects(tex8)
         self.play(
             Write(tex8)
         )
@@ -1037,9 +1017,9 @@ class QuaternionRotation(ThreeDScene):
             Unwrite(tex8)
         )
         self.play(
-            FadeIn(labels),
-            FadeIn(dots),
-            FadeIn(axes),
+            labels.animate.set_opacity(1.),
+            axes.animate.set_opacity(1.),
+            dots.animate.set_opacity(1.),
         )
         spehre = Sphere()
         self.play(
@@ -1064,12 +1044,12 @@ class QuaternionRotation(ThreeDScene):
         )
         self.wait(2)
         self.play(
-            spehre.animate.shift(np.array([3,1,2])).scale(3).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
+            spehre.animate.shift(np.array([2,.66,1.33])).scale(3).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
             run_time=3
         )
         self.wait(4)
         self.play(
-            spehre.animate.shift(np.array([-3,-1,-2])).scale(.3333).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
+            spehre.animate.shift(np.array([2,.66,1.33])).scale(.3333).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
             run_time=3
         )
         self.wait(4)
@@ -1078,6 +1058,7 @@ class QuaternionRotation(ThreeDScene):
             FadeOut(dots),
             FadeOut(spehre),
             FadeOut(axis),
+            FadeOut(labels),
             run_time=10
         )
     

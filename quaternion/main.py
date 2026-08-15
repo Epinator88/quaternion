@@ -737,7 +737,7 @@ class Quaternions(ThreeDScene):
             FadeOut(axis),
         )
 
-class QuaternionRotation(Scene):
+class QuaternionRotation(ThreeDScene):
     def construct(self):
         self.wait(1)
         tex1 = Text("point * quat")
@@ -790,19 +790,296 @@ class QuaternionRotation(Scene):
             sq2.animate.set_opacity(1.)
         )
         self.wait(4)
-        #ij ji top corner, add back the axes
-        #stuff in top corner
-        #circle and line twist and stretch
-        #swap in top corner
+        self.play(Uncreate(sq1), Unwrite(sq2))
+        tex3 = MathTex("ij \\neq ji")
+        self.play(
+            Write(tex3)
+        )
+        self.wait(2)
+        self.play(
+            Unwrite(tex3)
+        )
+        #we're just gonna be ripping this straight from Quaternion lmfaoooo
+        self.set_camera_orientation(phi=60*DEGREES, theta=160*DEGREES)
+        self.begin_ambient_camera_rotation()
+        axes = ThreeDAxes(
+            x_length=40,
+            y_length=40,
+            z_length=10,
+            x_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            },
+            y_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            },
+            z_axis_config={
+                "include_ticks": False,
+                "include_tip": False,
+                "stroke_width":4.
+            }
+        )
+        dot1 = Dot3D().scale(2)
+        doti = Dot3D(color=RED).shift(OUT*2).scale(2)
+        labeli = MathTex("i",tex_to_color_map={"i":RED})
+        dotni = Dot3D(color=RED).shift(IN*2).scale(2)
+        labelni = MathTex("-i",tex_to_color_map={"-i":RED})
+        dotj = Dot3D(color=GREEN).shift(UP*2).scale(2)
+        labelj = MathTex("j",tex_to_color_map={"j":GREEN})
+        dotnj = Dot3D(color=GREEN).shift(DOWN*2).scale(2)
+        labelnj = MathTex("-j",tex_to_color_map={"-j":GREEN})
+        dotk = Dot3D(color=BLUE).shift(LEFT*2).scale(2)
+        labelk = MathTex("k",tex_to_color_map={"k":BLUE})
+        dotnk = Dot3D(color=BLUE).shift(RIGHT*2).scale(2)
+        labelnk = MathTex("-k",tex_to_color_map={"-k":BLUE})
+        dots = VGroup(doti, dotni, dotj, dotnj, dotk, dotnk, dot1)
+        labels = VGroup(labeli, labelni, labelj, labelnj, labelk, labelnk)
+        labeli.always.next_to(doti)
+        labelni.always.next_to(dotni)
+        labelj.always.next_to(dotj)
+        labelnj.always.next_to(dotnj)
+        labelk.always.next_to(dotk)
+        labelnk.always.next_to(dotnk)
+        self.play(
+            Create(axes),
+            Create(dots),
+            Create(labels)
+        )
+        #i times p in the top corner
+        self.wait(3)
+        tex4 = Text("ip")
+        self.add_fixed_in_frame_mobjects(tex4)
+        tex4.to_corner(UL)
+        self.play(
+            Write(tex4)
+        )
+        #circle and line, twist and stretch
+        jk = Circle(radius=2, stroke_width=5).set_color(GOLD)
+        i1 = Line(IN*6, OUT*6, stroke_width=5).set_color(PURPLE)
+        self.play(
+            Create(jk),
+            Create(i1)
+        )
+        self.wait(2)
+        tag1 = Text("1")
+        tag2 = Text("i").shift(DOWN+LEFT)
+        tag3 = Text("-1").shift(DOWN*2)
+        tag4 = Text("-i").shift(DOWN+RIGHT)
+        ar1 = Arrow(tag1.get_center(), tag2.get_center(), buff=.4).set_opacity(.4)
+        ar2 = Arrow(tag2.get_center(), tag3.get_center(), buff=.4).set_opacity(.4)
+        ar3 = Arrow(tag3.get_center(), tag4.get_center(), buff=.4).set_opacity(.4)
+        ar4 = Arrow(tag4.get_center(), tag1.get_center(), buff=.4).set_opacity(.4)
+        circ1 = VGroup(tag1, tag2, tag3, tag4, ar1, ar2, ar3, ar4).set_color(PURPLE)
+        tag5 = Text("j")
+        tag6 = Text("-j").shift(DOWN+LEFT)
+        tag7 = Text("k").shift(DOWN*2)
+        tag8 = Text("-k").shift(DOWN+RIGHT)
+        ar5 = Arrow(tag5.get_center(), tag6.get_center(), buff=.4).set_opacity(.4)
+        ar6 = Arrow(tag6.get_center(), tag7.get_center(), buff=.4).set_opacity(.4)
+        ar7 = Arrow(tag7.get_center(), tag8.get_center(), buff=.4).set_opacity(.4)
+        ar8 = Arrow(tag8.get_center(), tag5.get_center(), buff=.4).set_opacity(.4)
+        circ2 = VGroup(tag5, tag6, tag7, tag8, ar5, ar6, ar7, ar8).set_color(GOLD)
+        ip_jk = CurvedArrow(RIGHT*2, UP*2, stroke_color=GOLD).shift(RIGHT*.2+UP*.2)
+        ip_i1 = Arrow3D(ORIGIN, OUT*2).shift(DOWN*.5+LEFT*.5).set_opacity(.6).set_color(PURPLE)
+        self.add_fixed_in_frame_mobjects(circ1)
+        circ1.shift(DOWN*1+LEFT*2)
+        self.play(
+            Create(ip_i1),
+            Create(circ1),
+            lag_ratio=.2,
+            run_time=3
+        )
+        self.add_fixed_in_frame_mobjects(circ2)
+        circ2.shift(DOWN*1+RIGHT*2)
+        self.play(
+            Create(ip_jk),
+            Create(circ2),
+            lag_ratio=.2,
+            run_time=3
+        )
+        self.wait(4)
+        #swap in top corner, p times i
+        tex5 = Text("pi").rotate(180*DEGREES)
+        tex5.to_corner(UL)
+        self.play(
+            Rotate(tex4, 540*DEGREES),
+            ar5.animate.scale(.01),
+            ar6.animate.scale(.01),
+            ar7.animate.scale(.01),
+            ar8.animate.scale(.01),
+            ip_jk.animate.scale(.01),
+            rate_func=rate_functions.rush_into
+        )
+        self.remove(tex4)
+        self.add_fixed_in_frame_mobjects(tex5)
+        ar5.rotate(180*DEGREES)
+        ar6.rotate(180*DEGREES)
+        ar7.rotate(180*DEGREES)
+        ar8.rotate(180*DEGREES)
+        ip_jk.rotate(90*DEGREES).flip()
+        self.play(AnimationGroup(
+            Rotate(tex5, 540*DEGREES),
+            ar5.animate.scale(100),
+            ar6.animate.scale(100),
+            ar7.animate.scale(100),
+            ar8.animate.scale(100),
+            ip_jk.animate.scale(100),
+            rate_func=rate_functions.rush_from),
+        )
         #again twist and stretch
+        self.wait(5)
         #flip for negative
+        tex6 = Text("-ip")
+        tex6.to_corner(UL)
+        self.play(
+            Unwrite(tex5),
+            ar1.animate.scale(.01),
+            ar2.animate.scale(.01),
+            ar3.animate.scale(.01),
+            ar4.animate.scale(.01),
+            ar5.animate.scale(.01),
+            ar6.animate.scale(.01),
+            ar7.animate.scale(.01),
+            ar8.animate.scale(.01),
+            ip_i1.animate.scale(.01),
+            FadeOut(ip_jk)
+        )
+        self.add_fixed_in_frame_mobjects(tex6)
+        ar1.rotate(180*DEGREES)
+        ar2.rotate(180*DEGREES)
+        ar3.rotate(180*DEGREES)
+        ar4.rotate(180*DEGREES)
+        ip_i1.shift(DOWN).flip(axis=OUT)
+        self.play(
+            Write(tex6),
+            ar1.animate.scale(100),
+            ar2.animate.scale(100),
+            ar3.animate.scale(100),
+            ar4.animate.scale(100),
+            ar5.animate.scale(100),
+            ar6.animate.scale(100),
+            ar7.animate.scale(100),
+            ar8.animate.scale(100),
+            ip_i1.animate.scale(100),
+            FadeIn(ip_jk)
+        )
+        self.wait(5)
+        tex7 = Text("p-i").rotate(180*DEGREES)
+        tex7.to_corner(UL)
+        self.play(
+            Rotate(tex6, 540*DEGREES),
+            ar5.animate.scale(.01),
+            ar6.animate.scale(.01),
+            ar7.animate.scale(.01),
+            ar8.animate.scale(.01),
+            ip_jk.animate.scale(.01),
+            rate_func=rate_functions.rush_into
+        )
+        self.remove(tex6)
+        self.add_fixed_in_frame_mobjects(tex7)
+        ar5.rotate(180*DEGREES)
+        ar6.rotate(180*DEGREES)
+        ar7.rotate(180*DEGREES)
+        ar8.rotate(180*DEGREES)
+        ip_jk.rotate(90*DEGREES).flip()
+        self.play(AnimationGroup(
+            Rotate(tex7, 540*DEGREES),
+             ar5.animate.scale(100),
+            ar6.animate.scale(100),
+            ar7.animate.scale(100),
+            ar8.animate.scale(100),
+            ip_jk.animate.scale(100),
+            rate_func=rate_functions.rush_from),
+        )
+        self.wait(5)
+        self.play(
+            FadeOut(labels),
+            FadeOut(axes),
+            FadeOut(dots),
+            FadeOut(tex7),
+            FadeOut(circ1),
+            FadeOut(circ2)
+        )
         #do it on the model
         #table of all possibilities
+        table2 = Table(
+            table=[["ipi: i^2, -1", "ip-i: kj*2"], ["-ipi: -kj*2", "-ip-i: -i^2, 1"]],
+            row_labels=["ip_", "-ip_"],
+            col_labels=["_pi", "_p-i"]
+        )
+        self.play(
+            Create(table2)
+        )
+        self.wait(4)
+        self.play(
+            table2.animate.add_highlighted_cell((1, 1), color=RED)
+        )
+        self.wait(4)
+        self.play(
+            table2.animate.add_highlighted_cell((1, 2), color=GREEN)
+        )
+        self.wait(4)
         #pick the wrong ones, pick the right ones
         #show the final quaternion, divided by two, then qvq-1
+        tex8 = MathTex("\\cos(\\frac{\\theta}{2})+\\sin(\\frac{\\theta}{2})(xi+yj+zk)",tex_to_color_map={'xi':RED,'yj':GREEN,'zk':BLUE,"\\theta":GOLD})
         #sphere should scale out and rotate then scale in and rotate more
-        #should be done by like...7? 8?
-        #then editing for like 4-5 hrs, done by 1am.
+        self.play(
+            FadeOut(table2)
+        )
+        self.play(
+            Write(tex8)
+        )
+        self.wait(5)
+        self.play(
+            Unwrite(tex8)
+        )
+        self.play(
+            FadeIn(labels),
+            FadeIn(dots),
+            FadeIn(axes),
+        )
+        spehre = Sphere()
+        self.play(
+            Create(spehre)
+        )
+        axis = Arrow3D(ORIGIN, np.array([3,1,2]), color=RED)
+        self.wait(1)
+        self.play(
+            Create(axis)
+        )
+        tex9 = MathTex("45^{\\circ}",tex_to_color_map={"45^{\\circ}":GOLD}).scale(2)
+        box3 = Rectangle(height=1, width=1).set_color(GOLD).set_fill(BLACK, 1.0).scale(2)
+        self.add_fixed_in_frame_mobjects(box3, tex9)
+        self.play(
+            FadeIn(box3),
+            FadeIn(tex9)
+        )
+        self.wait(1)
+        self.play(
+            FadeOut(box3),
+            FadeOut(tex9)
+        )
+        self.wait(2)
+        self.play(
+            spehre.animate.shift(np.array([3,1,2])).scale(3).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
+            run_time=3
+        )
+        self.wait(4)
+        self.play(
+            spehre.animate.shift(np.array([-3,-1,-2])).scale(.3333).rotate(angle=22.5*DEGREES, axis=np.array([3,1,2])),
+            run_time=3
+        )
+        self.wait(4)
+        self.play(
+            FadeOut(axes),
+            FadeOut(dots),
+            FadeOut(spehre),
+            FadeOut(axis),
+            run_time=10
+        )
     
 class Transition(Scene):
     def construct(self):
